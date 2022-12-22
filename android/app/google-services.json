@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "426337041361",
+    "project_id": "alertaabc-28d22",
+    "storage_bucket": "alertaabc-28d22.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:426337041361:android:b6c594a5de0109b68d3ef0",
+        "android_client_info": {
+          "package_name": "com.zzoids.alerta_abc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "426337041361-39jr33f5poutfuk6iun6d3k61jaevs7v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuWxEYn8m_Kj8a2SyV8m9e71B8fOz6gBM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "426337041361-39jr33f5poutfuk6iun6d3k61jaevs7v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
