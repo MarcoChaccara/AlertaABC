@@ -1,6 +1,10 @@
+import 'package:alerta_abc/models/text_model.dart';
 import 'package:alerta_abc/ui/general/colors.dart';
+import 'package:alerta_abc/ui/widgets/button_normal_widget.dart';
 import 'package:alerta_abc/ui/widgets/general_widgets.dart';
-import 'package:alerta_abc/ui/widgets/textfield_search_widget.dart';
+import 'package:alerta_abc/ui/widgets/item_reporte_widget.dart';
+import 'package:alerta_abc/ui/widgets/reporte_form_widget.dart';
+import 'package:alerta_abc/ui/widgets/textfield_normal_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -8,21 +12,49 @@ class HomePage extends StatelessWidget {
   CollectionReference reportesReference =
       FirebaseFirestore.instance.collection('Reportes');
 
-  Stream<int> counter() async* {
-    for (int i = 0; i < 10; i++) {
-      yield i;
-      await Future.delayed(const Duration(seconds: 2));
-    }
-  }
-
-  Future<int> getNumber() async {
-    return 1000;
+  // Formulario para el botón "Agregar Caso"
+  showReporteForm(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return ReporteFormWidget();
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBrandSecondaryColor,
+      floatingActionButton: InkWell(
+        onTap: () {
+          showReporteForm(context);
+        },
+        borderRadius: BorderRadius.circular(14.0),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8.0),
+          decoration: BoxDecoration(
+            color: kBrandPrimaryColor,
+            borderRadius: BorderRadius.circular(14.0),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              Text(
+                "Agregar caso",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -65,11 +97,62 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                     divider10(),
-                    TextFieldSearchWidget(),
+                    //Campo de búsqueda
+                    TextFieldNormalWidget(
+                      icon: Icons.search,
+                      hintText: "Buscar caso...",
+                    ),
                   ],
                 ),
               ),
-            )
+            ),
+            Padding(
+              padding: EdgeInsets.all(14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    " Todos los casos",
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w600,
+                      color: kBrandPrimaryColor.withOpacity(0.85),
+                    ),
+                  ),
+                  StreamBuilder(
+                    stream: reportesReference.snapshots(),
+                    builder: (BuildContext context, AsyncSnapshot snap) {
+                      if (snap.hasData) {
+                        List<ReporteModel> reportes = [];
+                        QuerySnapshot collection = snap.data;
+
+                        // collection.docs.forEach((element){
+                        //   Map<String, dynamic> myMap = element.data() as Map<String, dynamic>;
+                        //   reportes.add(ReporteModel.fromJson(myMap));
+                        // });
+
+                        reportes = collection.docs
+                            .map((e) => ReporteModel.fromJson(
+                                e.data() as Map<String, dynamic>))
+                            .toList();
+
+                        return ListView.builder(
+                          itemCount: reportes.length,
+                          shrinkWrap: true,
+                          physics: const ScrollPhysics(),
+                          itemBuilder: (BuildContext context, int index) {
+                            return ItemReporteWidget(
+                              reporteModel: reportes[index],
+                            );
+                          },
+                        );
+                      }
+                      return loadingWidget();
+                    },
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
