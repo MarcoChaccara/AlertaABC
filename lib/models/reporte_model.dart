@@ -14,10 +14,20 @@ class ReporteModel {
   });
 
   factory ReporteModel.fromJson(Map<String, dynamic> json) => ReporteModel(
-        name: json["name"],
-        description: json["description"],
-        date: json["date"],
-        category: json["category"],
-        status: json["status"],
-      );
+    name: json["name"],
+    description: json["description"],
+    date: json["date"],
+    category: json["category"] ,
+    status: json["status"],
+  );
+
+  Map<String, dynamic> toJson() =>{
+    "name": name,
+    "description": description,
+    "date": date,
+    "category": category,
+    "status": status,
+    
+  };
+
 }

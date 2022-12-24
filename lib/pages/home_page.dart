@@ -1,4 +1,4 @@
-import 'package:alerta_abc/models/text_model.dart';
+import 'package:alerta_abc/models/reporte_model.dart';
 import 'package:alerta_abc/ui/general/colors.dart';
 import 'package:alerta_abc/ui/widgets/button_normal_widget.dart';
 import 'package:alerta_abc/ui/widgets/general_widgets.dart';
@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
       FirebaseFirestore.instance.collection('Reportes');
 
   // Formulario para el botón "Agregar Caso"
-  showReporteForm(BuildContext context) {
+  showReporteForm(BuildContext context) {                 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,

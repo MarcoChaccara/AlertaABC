@@ -1,3 +1,5 @@
+import 'package:alerta_abc/models/reporte_model.dart';
+import 'package:alerta_abc/services/my_service_firestore.dart';
 import 'package:alerta_abc/ui/general/colors.dart';
 import 'package:alerta_abc/ui/widgets/button_normal_widget.dart';
 import 'package:alerta_abc/ui/widgets/general_widgets.dart';
@@ -5,22 +7,21 @@ import 'package:alerta_abc/ui/widgets/textfield_normal_widget.dart';
 import 'package:flutter/material.dart';
 
 class ReporteFormWidget extends StatefulWidget {
-  const ReporteFormWidget({super.key});
+  const ReporteFormWidget({Key? key}) : super (key: key);
 
   @override
   State<ReporteFormWidget> createState() => _ReporteFormWidgetState();
 }
 
 class _ReporteFormWidgetState extends State<ReporteFormWidget> {
-
   final formKey = GlobalKey<FormState>();
-
+  MyServiceFirestore reporteService =
+      MyServiceFirestore(collection: "Reportes");
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
 
   String categorySelected = "Localizado(a)";
-
 
   //Para la fecha
   showSelectDate() async {
@@ -52,10 +53,32 @@ class _ReporteFormWidgetState extends State<ReporteFormWidget> {
         );
       },
     );
-    if(datetime != null){
+    if (datetime != null) {
       _dateController.text = datetime.toString().substring(0, 10);
       setState(() {});
-    };
+    }
+  }
+
+  registerReporte() {
+    if (formKey.currentState!.validate()) {
+      //
+      ReporteModel reporteModel = ReporteModel(
+        name: _nameController.text,
+        description: _descriptionController.text,
+        date: _dateController.text,
+        category: categorySelected,
+        status: true,
+      );
+      reporteService.addReporte(reporteModel).then((value) {
+        if (value.isNotEmpty) {
+          Navigator.pop(context);
+          showSnackBarSuccess(context, "El caso fue registrado con éxito.",);
+        }
+      }).catchError((error) {
+        showSnackBarError(context, "Hubo un incoveniente, inténtalo de nuevo",);
+        Navigator.pop(context);
+      });
+    }
   }
 
   @override
@@ -108,7 +131,9 @@ class _ReporteFormWidgetState extends State<ReporteFormWidget> {
                   selectedColor: categoryColor[categorySelected],
                   checkmarkColor: Colors.white,
                   labelStyle: TextStyle(
-                    color: categorySelected == "Localizado(a)" ? Colors.white : kBrandPrimaryColor,
+                    color: categorySelected == "Localizado(a)"
+                        ? Colors.white
+                        : kBrandPrimaryColor,
                   ),
                   label: Text("Localizado(a)"),
                   onSelected: (bool value) {
@@ -123,7 +148,9 @@ class _ReporteFormWidgetState extends State<ReporteFormWidget> {
                   selectedColor: categoryColor[categorySelected],
                   checkmarkColor: Colors.white,
                   labelStyle: TextStyle(
-                    color: categorySelected == "Desaparecido(a)" ? Colors.white : kBrandPrimaryColor,
+                    color: categorySelected == "Desaparecido(a)"
+                        ? Colors.white
+                        : kBrandPrimaryColor,
                   ),
                   label: Text("Desaparecido(a)"),
                   onSelected: (bool value) {
@@ -138,7 +165,9 @@ class _ReporteFormWidgetState extends State<ReporteFormWidget> {
                   selectedColor: categoryColor[categorySelected],
                   checkmarkColor: Colors.white,
                   labelStyle: TextStyle(
-                    color: categorySelected == "Archivado(a)" ? Colors.white : kBrandPrimaryColor,
+                    color: categorySelected == "Archivado(a)"
+                        ? Colors.white
+                        : kBrandPrimaryColor,
                   ),
                   label: Text("Archivado(a)"),
                   onSelected: (bool value) {
@@ -159,10 +188,8 @@ class _ReporteFormWidgetState extends State<ReporteFormWidget> {
             ),
             divider20(),
             ButtonNormalWidget(
-              onPressed: (){
-                if(formKey.currentState!.validate()){
-                  
-                }
+              onPressed: () {
+                registerReporte();
               },
             ),
           ],
