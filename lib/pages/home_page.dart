@@ -9,6 +9,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
+
+  final TextEditingController _searchController = TextEditingController();
+
   CollectionReference reportesReference =
       FirebaseFirestore.instance.collection('Reportes');
 
@@ -16,9 +19,13 @@ class HomePage extends StatelessWidget {
   showReporteForm(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
-        return ReporteFormWidget();
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: ReporteFormWidget(),
+        );
       },
     );
   }
@@ -99,6 +106,7 @@ class HomePage extends StatelessWidget {
                     divider10(),
                     //Campo de búsqueda
                     TextFieldNormalWidget(
+                      controller: _searchController,
                       icon: Icons.search,
                       hintText: "Buscar caso...",
                     ),
