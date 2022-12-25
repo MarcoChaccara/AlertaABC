@@ -58,6 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                   text: "Iniciar Sesión",
                   color: kBrandPrimaryColor,
                   icon: "", 
+                  onPressed: (){},
                 ),
                 divider20(),
                 Text(
@@ -68,12 +69,14 @@ class _LoginPageState extends State<LoginPage> {
                   text: "Iniciar sesión con Google",
                   icon: "google",
                   color: Color(0xfff84b2a),
+                  onPressed: (){},
                 ),
                 divider20(),
                 ButtonCustomWidget(
                   text: "Iniciar sesión con Facebook",
                   icon: "facebook",
                   color: Color(0xff507cc0),
+                  onPressed: (){},
                 ),
                 divider20(),
                 Row(
